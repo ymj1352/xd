@@ -3,10 +3,10 @@ set -e
 
 # ==========================
 # 下载地址声明
-XRAY_URL="https://dufs.f.mfs.cc.cd/data/xray/xray.tar.gz"
-DNS_PROXY_URL="https://dufs.f.mfs.cc.cd/data/dns-proxy/dns-proxy.tar.gz"
-X_TUNNEL_URL="https://dufs.f.mfs.cc.cd/data/x-tunnel/x-tunnel.tar.gz"
-CLOUDFLARED_URL="https://dufs.f.mfs.cc.cd/data/cloudflared/cloudflared.tar.gz"
+XRAY_URL="${XRAY_URL:-https://dufs.f.mfs.cc.cd/data/xray/xray.tar.gz}"
+DNS_PROXY_URL="${DNS_PROXY_URL:-https://dufs.f.mfs.cc.cd/data/dns-proxy/dns-proxy.tar.gz}"
+X_TUNNEL_URL="${X_TUNNEL_URL:-https://dufs.f.mfs.cc.cd/data/x-tunnel/x-tunnel.tar.gz}"
+CLOUDFLARED_URL="${CLOUDFLARED_URL:-https://dufs.f.mfs.cc.cd/data/cloudflared/cloudflared.tar.gz}"
 
 # ==========================
 # 默认 MODE
