@@ -115,42 +115,63 @@ if [[ "$MODE" == "client_xray" ]]; then
     XRAY_LOG="xray.log"
 fi
 
-# x-tunnel
+# 启动 x-tunnel
 if [[ "$MODE" == "server_direct" || "$MODE" == "server_argo" || "$MODE" == "client_tunnel" || "$MODE" == "x-tunnel" ]]; then
     XTUNNEL_CMD="./x-tunnel"
-    if [ -f x-tunnel.txt ]; then
+    XTUNNEL_CONF="./x-tunnel.txt"
+
+    if [ -f "$XTUNNEL_CONF" ]; then
         while IFS='=' read -r key value; do
             key=$(echo "$key" | tr -d ' ')
-            value=$(echo "$value" | tr -d ' ')
-            [ -z "$value" ] && continue
+            value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+            # 跳过空行、注释、花括号
+            [[ -z "$key" || "$key" == "{" || "$key" == "}" || "$key" =~ ^// ]] && continue
+            [[ -z "$value" ]] && continue
+
             case "$key" in
-                fallback|insecure) XTUNNEL_CMD="$XTUNNEL_CMD -$key" ;;
-                *) XTUNNEL_CMD="$XTUNNEL_CMD -$key $value" ;;
+                fallback|insecure)
+                    XTUNNEL_CMD="$XTUNNEL_CMD -$key"
+                    ;;
+                *)
+                    XTUNNEL_CMD="$XTUNNEL_CMD -$key $value"
+                    ;;
             esac
-        done < <(grep -v '^[{} ]' x-tunnel.txt)
+        done < "$XTUNNEL_CONF"
     fi
-    echo "启动 x-tunnel..."
+
+    echo "启动 x-tunnel："
+    echo "$XTUNNEL_CMD"
+
     $XTUNNEL_CMD >x-tunnel.log 2>&1 &
-    XTUNNEL_PID=$!
     XTUNNEL_LOG="x-tunnel.log"
 fi
 
-# cloudflared
+# 启动 cloudflared
 if [[ "$MODE" == "server_argo" ]]; then
     CLOUDFLARED_CMD="./cloudflared"
-    if [ -f cloudflared.txt ]; then
+    CLOUDFLARED_CONF="./cloudflared.txt"
+
+    if [ -f "$CLOUDFLARED_CONF" ]; then
         while IFS='=' read -r key value; do
             key=$(echo "$key" | tr -d ' ')
-            value=$(echo "$value" | tr -d ' ')
-            [ -z "$value" ] && continue
+            value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+            # 跳过空行、注释、花括号
+            [[ -z "$key" || "$key" == "{" || "$key" == "}" || "$key" =~ ^// ]] && continue
+            [[ -z "$value" ]] && continue
+
             CLOUDFLARED_CMD="$CLOUDFLARED_CMD --$key $value"
-        done < <(grep -v '^[{} ]' cloudflared.txt)
+        done < "$CLOUDFLARED_CONF"
     fi
-    echo "启动 cloudflared..."
+
+    echo "启动 cloudflared："
+    echo "$CLOUDFLARED_CMD"
+
     $CLOUDFLARED_CMD >cloudflared.log 2>&1 &
-    CLOUDFLARED_PID=$!
     CLOUDFLARED_LOG="cloudflared.log"
 fi
+
 
 # ==========================
 # 日志前台输出（优先级 x-tunnel > xray > cloudflared > dns-proxy）
