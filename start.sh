@@ -3,7 +3,7 @@ set -e
 
 # ==========================
 # 下载地址声明
-XRAY_URL="https://dufs.f.mfs.cc.cd/data/xray.tar.gz"
+XRAY_URL="https://dufs.f.mfs.cc.cd/data/xray/xray.tar.gz"
 DNS_PROXY_URL="https://dufs.f.mfs.cc.cd/data/dns-proxy/dns-proxy.tar.gz"
 X_TUNNEL_URL="https://dufs.f.mfs.cc.cd/data/x-tunnel/x-tunnel.tar.gz"
 CLOUDFLARED_URL="https://dufs.f.mfs.cc.cd/data/cloudflared/cloudflared.tar.gz"
@@ -110,7 +110,7 @@ fi
 # xray
 if [[ "$MODE" == "client_xray" ]]; then
     echo "启动 xray 客户端..."
-    ./xray run -config /root/config.json >xray.log 2>&1 &
+    ./xray run -config /root/xray/config.json >xray.log 2>&1 &
     XRAY_PID=$!
     XRAY_LOG="xray.log"
 fi
