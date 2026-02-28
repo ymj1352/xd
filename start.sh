@@ -83,7 +83,7 @@ esac
 
 # ===========================================
 # 获取容器 IP
-CONTAINER_IP=$(hostname -I | awk '{print $1}')
+CONTAINER_IP=$(hostname -i | awk '{print $1}')
 
 # ==============================================
 # 输出启动模式信息
@@ -110,7 +110,7 @@ fi
 # xray
 if [[ "$MODE" == "client_xray" ]]; then
     echo "启动 xray 客户端..."
-    ./xray run -config /root/xray/config.json >xray.log 2>&1 &
+    ./xray run -config /root/xray/xray.json >xray.log 2>&1 &
     XRAY_PID=$!
     XRAY_LOG="xray.log"
 fi
