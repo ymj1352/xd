@@ -110,7 +110,7 @@ fi
 # xray
 if [[ "$MODE" == "client_xray" ]]; then
     echo "启动 xray 客户端..."
-    ./xray run -config /root/xray/xray.json >xray.log 2>&1 &
+    ./xray run -config xray.json >xray.log 2>&1 &
     XRAY_PID=$!
     XRAY_LOG="xray.log"
 fi
